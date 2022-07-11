@@ -12,12 +12,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+// router.post("/", async (req, res) => {
+//   try {
+//     console.log(req.body);
+//     const temperature = new Temperature(req.body);
+//     await temperature.save();
+//     res.status(201).send(temperature);
+//   } catch (e) {
+//     res.status(400).send(e);
+//   }
+// });
+
 router.post("/", async (req, res) => {
   try {
-    console.log(req.body);
-    const temperature = new Temperature(req.body);
-    await temperature.save();
-    res.status(201).send(temperature);
+    const temperature = await Temperature.findOne({ city: req.body.city });
+
+    if (!temperature) {
+      return res.status(400).send();
+    }
+
+    res.status(200).send(temperature);
   } catch (e) {
     res.status(400).send(e);
   }
